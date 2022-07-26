@@ -1441,6 +1441,10 @@ tsetchar(Rune u, const Glyph *attr, int x, int y)
 	term.line[y][x] = *attr;
 	term.line[y][x].u = u;
 	term.line[y][x].mode |= ATTR_SET;
+
+    if (isboxdraw(u))
+            term.line[y][x].mode |= ATTR_BOXDRAW;
+
 }
 
 void
@@ -1934,7 +1938,7 @@ csihandle(void)
       }
 			/* vte does this:
 			tscrollup(0, term.row-1, term.row, SCROLL_SAVEHIST); */
-      
+
 			/* alacritty does this: */
 			for (n = term.row-1; n >= 0 && tlinelen(term.line[n]) == 0; n--);
 			if (n >= 0)
