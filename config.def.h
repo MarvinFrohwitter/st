@@ -5,14 +5,11 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Liberation Mono:pixelsize=12:antialias=true:autohint=true";
+static char *font = "mono:pixelsize=14:antialias=true:autohint=true";
 /* Spare fonts */
-static char *font2[] = {
-/*	"Inconsolata for Powerline:pixelsize=12:antialias=true:autohint=true", */
-/*	"Hack Nerd Font Mono:pixelsize=11:antialias=true:autohint=true", */
-};
+static char *font2[] = { "JoyPixels:pixelsize=12:antialias=true:autohint=true" };
+static int borderpx = 1;
 
-static int borderpx = 2;
 
 /*
  * What program is execed by st depends of these precedence rules:
@@ -79,7 +76,7 @@ static unsigned int cursorthickness = 2;
  *    Bold affects lines thickness if boxdraw_bold is not 0. Italic is ignored.
  * 0: disable (render all U25XX glyphs normally from the font).
  */
-const int boxdraw = 0;
+const int boxdraw = 1;
 const int boxdraw_bold = 0;
 
 /* braille (U28XX):  1: render as adjacent "pixels",  0: use font */
@@ -112,7 +109,7 @@ char *termname = "st-256color";
 unsigned int tabspaces = 8;
 
 /* bg opacity */
-float alpha = 0.8;
+float alpha = 0.7;
 
 /* Terminal colors (16 first used in escape sequence) */
 static const char *colorname[] = {
@@ -168,9 +165,9 @@ static unsigned int cursorshape = 2;
  * Default columns and rows numbers
  */
 
-static unsigned int cols = 80;
-static unsigned int rows = 24;
 
+static unsigned int cols = 100;
+static unsigned int rows = 30;
 /*
  * Default colour and shape of the mouse cursor
  */
@@ -243,7 +240,7 @@ static MouseShortcut mshortcuts[] = {
 };
 
 /* Internal keyboard shortcuts. */
-#define MODKEY Mod1Mask
+#define MODKEY Mod4Mask
 #define TERMMOD (ControlMask|ShiftMask)
 
 static Shortcut shortcuts[] = {
@@ -252,16 +249,36 @@ static Shortcut shortcuts[] = {
 	{ ControlMask,          XK_Print,       toggleprinter,  {.i =  0} },
 	{ ShiftMask,            XK_Print,       printscreen,    {.i =  0} },
 	{ XK_ANY_MOD,           XK_Print,       printsel,       {.i =  0} },
-	{ TERMMOD,              XK_Prior,       zoom,           {.f = +1} },
-	{ TERMMOD,              XK_Next,        zoom,           {.f = -1} },
-	{ TERMMOD,              XK_Home,        zoomreset,      {.f =  0} },
+	{ ControlMask,          XK_plus,        zoom,           {.f = +1} },
+	{ ControlMask,          XK_minus,       zoom,           {.f = -1} },
+	{ ControlMask,          XK_Home,        zoomreset,      {.f =  0} },
 	{ TERMMOD,              XK_C,           clipcopy,       {.i =  0} },
 	{ TERMMOD,              XK_V,           clippaste,      {.i =  0} },
-	{ TERMMOD,              XK_Y,           selpaste,       {.i =  0} },
+	{ ControlMask|ShiftMask,XK_C,           clipcopy,       {.i =  0} },
+	{ ControlMask|ShiftMask,XK_V,           clippaste,      {.i =  0} },
+	{ MODKEY,               XK_c,           clipcopy,       {.i =  0} },
+	{ ShiftMask,            XK_Insert,      clippaste,      {.i =  0} },
+	{ MODKEY,               XK_v,           clippaste,      {.i =  0} },
 	{ ShiftMask,            XK_Insert,      selpaste,       {.i =  0} },
 	{ TERMMOD,              XK_Num_Lock,    numlock,        {.i =  0} },
 	{ ShiftMask,            XK_Page_Up,     kscrollup,      {.i = -1} },
 	{ ShiftMask,            XK_Page_Down,   kscrolldown,    {.i = -1} },
+	{ MODKEY,               XK_Page_Up,     kscrollup,      {.i = -1} },
+	{ MODKEY,               XK_Page_Down,   kscrolldown,    {.i = -1} },
+	{ MODKEY,               XK_k,           kscrollup,      {.i =  1} },
+	{ MODKEY,               XK_j,           kscrolldown,    {.i =  1} },
+	{ MODKEY,               XK_Up,          kscrollup,      {.i =  1} },
+	{ MODKEY,               XK_Down,        kscrolldown,    {.i =  1} },
+	{ MODKEY,               XK_u,           kscrollup,      {.i = -1} },
+	{ MODKEY,               XK_d,           kscrolldown,    {.i = -1} },
+	/* { MODKEY,		XK_s,		changealpha,	{.f = -0.05} }, */
+	/* { MODKEY,		XK_a,		changealpha,	{.f = +0.05} }, */
+	{ TERMMOD,              XK_Up,          zoom,           {.f = +1} },
+	{ TERMMOD,              XK_Down,        zoom,           {.f = -1} },
+	{ TERMMOD,              XK_K,           zoom,           {.f = +1} },
+	{ TERMMOD,              XK_J,           zoom,           {.f = -1} },
+	{ TERMMOD,              XK_U,           zoom,           {.f = +2} },
+	{ TERMMOD,              XK_D,           zoom,           {.f = -2} },
 };
 
 /*
@@ -522,7 +539,7 @@ static Key key[] = {
  * If no match is found, regular selection is used.
  */
 static uint selmasks[] = {
-	[SEL_RECTANGULAR] = Mod1Mask,
+	[SEL_RECTANGULAR] = Mod4Mask,
 };
 
 /*
