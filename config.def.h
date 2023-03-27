@@ -8,8 +8,14 @@
 static char *font = "JetBrainsMono Nerd Font:pixelsize=14:antialias=true:autohint=true";
 /* Spare fonts */
 static char *font2[] = { "JoyPixels:pixelsize=12:antialias=true:autohint=true" };
-static int borderpx = 1;
 
+/*
+ * borderperc: percentage of cell width to use as a border
+ * 		0 = no border, 100 = border width is same as cell width
+ */
+// static int borderpx = 1;
+static int borderpx;
+static int borderperc = 20;
 
 /*
  * What program is execed by st depends of these precedence rules:

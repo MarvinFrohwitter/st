@@ -1093,6 +1093,8 @@ xloadfonts(const char *fontstr, double fontsize)
 	win.cw = ceilf(dc.font.width * cwscale);
 	win.ch = ceilf(dc.font.height * chscale);
 
+	borderpx = ceilf(((float)borderperc / 100) * win.cw);
+
 	FcPatternDel(pattern, FC_SLANT);
 	FcPatternAddInteger(pattern, FC_SLANT, FC_SLANT_ITALIC);
 	if (xloadfont(&dc.ifont, pattern))
