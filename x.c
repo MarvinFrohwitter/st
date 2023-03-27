@@ -70,6 +70,7 @@ static void clipcopy(const Arg *);
 static void clippaste(const Arg *);
 static void numlock(const Arg *);
 static void selpaste(const Arg *);
+static void changealpha(const Arg *);
 static void zoom(const Arg *);
 static void zoomabs(const Arg *);
 static void zoomreset(const Arg *);
@@ -185,6 +186,7 @@ static void xsetenv(void);
 static void xseturgency(int);
 static int evcol(XEvent *);
 static int evrow(XEvent *);
+static float clamp(float, float, float);
 
 static void expose(XEvent *);
 static void visibility(XEvent *);
@@ -319,6 +321,18 @@ numlock(const Arg *dummy)
 }
 
 void
+changealpha(const Arg *arg)
+{
+    if((alpha > 0 && arg->f < 0) || (alpha < 1 && arg->f > 0))
+        alpha += arg->f;
+    alpha = clamp(alpha, 0.0, 1.0);
+    // alphaUnfocus = clamp(alpha-alphaOffset, 0.0, 1.0);
+
+    xloadcols();
+    redraw();
+}
+
+void
 zoom(const Arg *arg)
 {
 	Arg larg;
@@ -369,6 +383,15 @@ evrow(XEvent *e)
 	int y = e->xbutton.y - win.vborderpx;
 	LIMIT(y, 0, win.th - 1);
 	return y / win.ch;
+}
+
+float
+clamp(float value, float lower, float upper) {
+    if(value < lower)
+        return lower;
+    if(value > upper)
+        return upper;
+    return value;
 }
 
 void
@@ -713,6 +736,7 @@ setsel(char *str, Time t)
 	XSetSelectionOwner(xw.dpy, XA_PRIMARY, xw.win, t);
 	if (XGetSelectionOwner(xw.dpy, XA_PRIMARY) != xw.win)
 		selclear();
+	clipcopy(NULL);
 }
 
 void
