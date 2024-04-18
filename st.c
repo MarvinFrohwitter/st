@@ -1117,7 +1117,7 @@ tsetdirtattr(int attr)
 void
 tfulldirt(void)
 {
-	tsync_end();
+tsync_end();
   for (int i = 0; i < term.row; i++)
 		term.dirty[i] = 1;
 }
